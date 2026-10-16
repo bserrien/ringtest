@@ -2,12 +2,15 @@
 title: "Analysis of Interlaboratory Studies using ISO 5725-2:2025"
 author: "ISO 5725 Package Maintainer"
 date: "`r Sys.Date()`"
-format: html
+vignette: >
+  %\VignetteIndexEntry{Vignette's Title}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ## Introduction
 
-The `iso5725` package implements the statistical workflow outlined in **ISO 5725-2:2025** (*Accuracy (trueness and precision) of measurement methods and results — Part 2: Basic method for the determination of repeatability and reproducibility of a standard measurement method*).
+The `ringtest` package implements the statistical workflow outlined in **ISO 5725-2:2025** (*Accuracy (trueness and precision) of measurement methods and results — Part 2: Basic method for the determination of repeatability and reproducibility of a standard measurement method*).
 
 This vignette demonstrates how to:
 1. Load interlaboratory (ring test) data.
