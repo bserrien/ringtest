@@ -2,6 +2,11 @@
 title: "Analysis of Interlaboratory Studies using ISO 5725-2:2025"
 author: "ISO 5725 Package Maintainer"
 date: "`r Sys.Date()`"
+format: 
+  html:
+    toc: true
+    embed-resources: true
+    html-math-method: mathjax
 vignette: >
   %\VignetteIndexEntry{Vignette's Title}
   %\VignetteEngine{quarto::html}
