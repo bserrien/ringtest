@@ -1,17 +1,18 @@
 ---
-title: "Analysis of Interlaboratory Studies using ISO 5725-2:2025"
-author: "ISO 5725 Package Maintainer"
-date: "`r Sys.Date()`"
-format: 
-  html:
-    toc: true
-    embed-resources: true
-    html-math-method: mathjax
+title: "Vignette Title"
+output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette's Title}
-  %\VignetteEngine{quarto::html}
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
 
 ## Introduction
 
