@@ -1,3 +1,6 @@
+#' calc_cell_stats
+#'
+#' @description
 #' Calculate cell means and within-cell standard deviations
 #'
 #' @param data A data.frame with columns: `lab`, `level`, `value`
