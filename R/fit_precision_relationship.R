@@ -6,6 +6,7 @@
 #' @param m Vector of mean levels
 #' @param s Vector of standard deviations (s_r or s_R)
 #' @param rel Relationship type:
+#' '0' (s = constant) (8.6.13.2)
 #' 'I' (s = b * m),
 #' 'II' (s = a + b * m),
 #' 'III' (s^2 = a_v^2 + (b_v * m)^2),
@@ -13,10 +14,21 @@
 #' @param max_iter maximal number of iterations (used in rel = `II` or `III`)
 #'
 #' @export
-fit_precision_relationship <- function(m, s, rel = c("I", "II", "III", "IV"),
-                                       max_iter = 10) {
+fit_precision_relationship <- function(
+    m, s, rel = c("0", "I", "II", "III", "IV"), max_iter = 10) {
   rel <- match.arg(rel)
   q   <- length(m)
+
+  if (rel == "0") {
+    # Clause 8.6.13.2
+    s_mean <- mean(s)
+    prec_rel <- list(
+      rel     = "0",
+      formula = "s = constant",
+      params  = c(s = s_mean),
+      fitted  = rep(s_mean, q)
+    )
+  }
 
   if (rel == "I") {
     # Clause 8.5.2.4: Simplified formula b = sum(s/m) / q

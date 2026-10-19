@@ -7,7 +7,7 @@
 fit_precision_relationship(
   m,
   s,
-  rel = c("I", "II", "III", "IV"),
+  rel = c("0", "I", "II", "III", "IV"),
   max_iter = 10
 )
 }
@@ -17,6 +17,7 @@ fit_precision_relationship(
 \item{s}{Vector of standard deviations (s_r or s_R)}
 
 \item{rel}{Relationship type:
+'0' (s = constant) (8.6.13.2)
 'I' (s = b * m),
 'II' (s = a + b * m),
 'III' (s^2 = a_v^2 + (b_v * m)^2),

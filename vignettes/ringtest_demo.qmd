@@ -61,6 +61,7 @@ Calculate the precision statistics per level and fit the relations.
 precision_tbl <- precision(ringtest_demo)
 
 # reproducibility
+fit0 <- with(precision_tbl, fit_precision_relationship(m_hat, s_R, rel = "0"))
 fit1 <- with(precision_tbl, fit_precision_relationship(m_hat, s_R, rel = "I"))
 fit2 <- with(precision_tbl, fit_precision_relationship(m_hat, s_R, rel = "II"))
 fit3 <- with(precision_tbl, fit_precision_relationship(m_hat, s_R, rel = "III"))
@@ -69,6 +70,7 @@ fit4 <- with(precision_tbl, fit_precision_relationship(m_hat, s_R, rel = "IV"))
 ggplot(precision_tbl, aes(m_hat, s_R)) +
   geom_point() +
   geom_line() +
+  geom_line(aes(y = fit0$fitted, color = fit0$rel)) +
   geom_line(aes(y = fit1$fitted, color = fit1$rel)) +
   geom_line(aes(y = fit2$fitted, color = fit2$rel)) +
   geom_line(aes(y = fit3$fitted, color = fit3$rel)) +
@@ -76,6 +78,7 @@ ggplot(precision_tbl, aes(m_hat, s_R)) +
   labs(title = "Reproducibility", color = "Type of relationship (ISO)")
 
 # repeatability
+fit0 <- with(precision_tbl, fit_precision_relationship(m_hat, s_r, rel = "0"))
 fit1 <- with(precision_tbl, fit_precision_relationship(m_hat, s_r, rel = "I"))
 fit2 <- with(precision_tbl, fit_precision_relationship(m_hat, s_r, rel = "II"))
 fit3 <- with(precision_tbl, fit_precision_relationship(m_hat, s_r, rel = "III"))
@@ -84,6 +87,7 @@ fit4 <- with(precision_tbl, fit_precision_relationship(m_hat, s_r, rel = "IV"))
 ggplot(precision_tbl, aes(m_hat, s_r)) +
   geom_point() +
   geom_line() +
+  geom_line(aes(y = fit0$fitted, color = fit0$rel)) +
   geom_line(aes(y = fit1$fitted, color = fit1$rel)) +
   geom_line(aes(y = fit2$fitted, color = fit2$rel)) +
   geom_line(aes(y = fit3$fitted, color = fit3$rel)) +
