@@ -3,38 +3,53 @@
 #' @description
 #' Detection of stragglers and outliers with Cochran's and Grubbs' tests.
 #'
-#' @param stats output from function calc_cell_stats
-#' @param max_iter maximal number of outlier-detection-and-cleaning iterations
+#' @param cell_stats output from function `calc_cell_stats`
 #'
 #' @export
-test_outliers <- function(stats, max_iter = 7) {
+test_outliers <- function(cell_stats,
+                          alpha_straggler = 0.05,
+                          alpha_outlier = 0.01) {
 
-  # outlier screen per level (8.6.5)
-  levels         <- unique(stats$level)
-  outlier_report <- list()
+  # initialize output structure
+  res               <- cell_stats[, c("lab", "level", "n")]
+  res$cochran       <- NA_character_
+  res$grubbs_single <- NA_character_
+  res$grubbs_double <- NA_character_
 
-  clean_stats <- stats
+  # outlier screen per level (Clause 8.6.5)
+  levels <- unique(cell_stats$level)
   for (lvl in levels) {
-    sub_stats <- clean_stats[clean_stats$level == lvl, ]
-    cochran   <- test_cochran(sub_stats)
-    grubbs_1  <- test_grubbs_single(sub_stats)
-    grubbs_2  <- test_grubbs_double(sub_stats)
-    outlier_report[[as.character(lvl)]] <- list(
-      cochran       = cochran,
-      grubbs_single = grubbs_1,
-      grubbs_double = grubbs_2
-    )
+    idx_lvl   <- which(cell_stats$level == lvl)
+    sub_stats <- cell_stats[idx_lvl, ]
 
-    # Discard statistical outliers (**) as per Clause 8.6.9
-    if (cochran$status == "Outlier (**)") {
-      clean_stats$sd[clean_stats$level == lvl &
-                       clean_stats$lab == cochran$suspect_lab] <- NA
+    cochran <- test_cochran(sub_stats)
+    if (cochran$status != "OK") {
+      target_row <- which(
+        res$level == lvl & res$lab == cochran$suspect_lab
+      )
+      res$cochran[target_row] <- cochran$status
     }
-    if (grubbs_1$status == "Outlier (**)") {
-      clean_stats$mean[clean_stats$level == lvl &
-                         clean_stats$lab == grubbs_1$suspect_lab] <- NA
-      clean_stats$sd[clean_stats$level == lvl &
-                       clean_stats$lab == grubbs_1$suspect_lab] <- NA
+
+    grubbs_single <- test_grubbs_single(sub_stats)
+    if (grubbs_single$status != "OK") {
+      target_row <- which(
+        res$level == lvl & res$lab == grubbs_single$suspect_lab
+      )
+      res$grubbs_single[target_row] <- grubbs_single$status
+    }
+
+    # Rule: Do NOT apply double test if single test found an outlier
+    # Clause 8.3.5.3
+    if (grubbs_single$status == "OK") {
+      grubbs_double <- test_grubbs_double(sub_stats)
+      if (grubbs_double$status != "OK") {
+        target_rows <- which(
+          res$level == lvl & res$lab %in% grubbs_double$suspect_labs
+        )
+        res$grubbs_double[target_rows] <- grubbs_double$status
+      }
     }
   }
+
+  return(res)
 }

@@ -11,6 +11,6 @@
 cochran_critical_value <- function(p, n, alpha = 0.05) {
   df1   <- (p - 1) * (n - 1)
   df2   <- n - 1
-  f_val <- stats::qf(1 - (alpha / p), df1, df2)
+  f_val <- stats::qf(alpha / p, df1, df2)
   1 / (1 + (p - 1) * f_val)
 }

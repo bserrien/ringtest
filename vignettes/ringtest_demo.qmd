@@ -25,7 +25,7 @@ ggplot(ringtest_demo, aes(level, value, color = lab)) +
   geom_point(position = position_jitterdodge())
 ```
 
-Calculate cell statistics and Mandel's $h$ and $k$ statistics. Compare against critical values.
+Calculate cell statistics and Mandel's $h$ and $k$ statistics. Compare against critical values. The ISO norm specifies these are only indicatory and no decisions should be made based on these statistics alone.
 
 ```{r}
 mhcrit <- mandel_h_indicator(p = 10, alpha = 0.05)
@@ -51,14 +51,25 @@ ggplot(cellstats, aes(level, k, fill = factor(ksign))) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
+Formal statistical tests for outliers should be done with Cochran's test for outlying variance and Grubb's test for outlying means (single & double).
+
 ```{r}
-# .... outlier detection & cleaning
+outliers <- test_outliers(cellstats)
+outliers |> 
+  filter(!is.na(coalesce(cochran, grubbs_single, grubbs_double)))
+
+# this should be an interactive proces: examine the outliers and decide what to do with them, here we just remove the respective data
+ringtest_demo_clean <- ringtest_demo |> 
+  filter(
+    !(lab == "Lab_08" & level == "Level_2"),
+    !(lab == "Lab_10" & level == "Level_5")
+  )
 ```
 
-Calculate the precision statistics per level and fit the relations.
+Calculate the precision statistics per level and fit the relations. This is applied on the cleaned dataset.
 
 ```{r}
-precision_tbl <- precision(ringtest_demo)
+precision_tbl <- precision(ringtest_demo_clean)
 
 # reproducibility
 fit0 <- with(precision_tbl, fit_precision_relationship(m_hat, s_R, rel = "0"))
