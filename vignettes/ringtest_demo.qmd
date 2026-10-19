@@ -1,0 +1,92 @@
+---
+title: "Ringtest demonstration"
+vignette: >
+  %\VignetteIndexEntry{Ringtest demonstration}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
+knitr:
+  opts_chunk:
+    collapse: true
+    comment: '#>'
+---
+
+```{r}
+#| label: setup
+library(ringtest)
+library(tidyverse)
+```
+
+Import the demonstration data included in the `ringtest` package and make a quick visualization of the data.
+
+```{r}
+data("ringtest_demo")
+
+ggplot(ringtest_demo, aes(level, value, color = lab)) +
+  geom_point(position = position_jitterdodge())
+```
+
+Calculate cell statistics and Mandel's $h$ and $k$ statistics. Compare against critical values.
+
+```{r}
+mhcrit <- mandel_h_indicator(p = 10, alpha = 0.05)
+mkcrit <- mandel_k_indicator(p = 10, n = 5, alpha = 0.05)
+
+cellstats <- calc_cell_stats(ringtest_demo) |> 
+  calc_mandel_hk() |> 
+  mutate(
+    ksign = ifelse(k < mkcrit, 0, 1),
+    hsign = ifelse(abs(h) < mhcrit, 0, 1)
+  )
+
+ggplot(cellstats, aes(level, h, fill = factor(hsign))) +
+  facet_wrap(~ lab, nrow = 2) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  geom_hline(yintercept = c(1, -1) * mhcrit, lty = 2) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggplot(cellstats, aes(level, k, fill = factor(ksign))) +
+  facet_wrap(~ lab, nrow = 2) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  geom_hline(yintercept = mkcrit, lty = 2) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+```{r}
+# .... outlier detection & cleaning
+```
+
+Calculate the precision statistics per level and fit the relations.
+
+```{r}
+precision_tbl <- precision(ringtest_demo)
+
+# reproducibility
+fit1 <- with(precision_tbl, fit_precision_relationship(m_hat, s_R, rel = "I"))
+fit2 <- with(precision_tbl, fit_precision_relationship(m_hat, s_R, rel = "II"))
+fit3 <- with(precision_tbl, fit_precision_relationship(m_hat, s_R, rel = "III"))
+fit4 <- with(precision_tbl, fit_precision_relationship(m_hat, s_R, rel = "IV"))
+
+ggplot(precision_tbl, aes(m_hat, s_R)) +
+  geom_point() +
+  geom_line() +
+  geom_line(aes(y = fit1$fitted, color = fit1$rel)) +
+  geom_line(aes(y = fit2$fitted, color = fit2$rel)) +
+  geom_line(aes(y = fit3$fitted, color = fit3$rel)) +
+  geom_line(aes(y = fit4$fitted, color = fit4$rel)) +
+  labs(title = "Reproducibility", color = "Type of relationship (ISO)")
+
+# repeatability
+fit1 <- with(precision_tbl, fit_precision_relationship(m_hat, s_r, rel = "I"))
+fit2 <- with(precision_tbl, fit_precision_relationship(m_hat, s_r, rel = "II"))
+fit3 <- with(precision_tbl, fit_precision_relationship(m_hat, s_r, rel = "III"))
+fit4 <- with(precision_tbl, fit_precision_relationship(m_hat, s_r, rel = "IV"))
+
+ggplot(precision_tbl, aes(m_hat, s_r)) +
+  geom_point() +
+  geom_line() +
+  geom_line(aes(y = fit1$fitted, color = fit1$rel)) +
+  geom_line(aes(y = fit2$fitted, color = fit2$rel)) +
+  geom_line(aes(y = fit3$fitted, color = fit3$rel)) +
+  geom_line(aes(y = fit4$fitted, color = fit4$rel)) +
+  labs(title = "Repeatability", color = "Type of relationship (ISO)")
+```
