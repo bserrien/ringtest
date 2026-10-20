@@ -107,7 +107,7 @@ fit_precision_relationship <- function(
     prec_rel <- list(
       rel = "IV",
       formula = "s = C * m^d",
-      params = c(C = C_const, c = c, d = d),
+      params = c(C = C_const, d = d),
       fitted = s_hat
     )
   }
