@@ -23,6 +23,10 @@ data("ringtest_demo")
 
 ggplot(ringtest_demo, aes(level, value, color = lab)) +
   geom_point(position = position_jitterdodge())
+
+ggplot(ringtest_demo, aes(level, value, color = lab)) +
+  geom_point(position = position_jitterdodge()) +
+  facet_wrap(~ level, nrow = 1, scales = "free")
 ```
 
 Calculate cell statistics and Mandel's $h$ and $k$ statistics. Compare against critical values. The ISO norm specifies these are only indicatory and no decisions should be made based on these statistics alone.
@@ -66,11 +70,44 @@ ringtest_demo_clean <- ringtest_demo |>
   )
 ```
 
-Calculate the precision statistics per level and fit the relations. This is applied on the cleaned dataset.
+Calculate the precision statistics per level. This is applied on the cleaned dataset. The following plot shows the reproducibility variance for each level and the distribution of its two components (repeatability variance and inter-laboratory variance):
+
+$$
+\sigma_R^2 = \sigma_r^2 + \sigma_L^2
+$$
 
 ```{r}
 precision_tbl <- precision(ringtest_demo_clean)
 
+# plot of variance components
+precision_tbl |> 
+  pivot_longer(c(s_r, s_L), names_to = "varcomp", values_to = "sigma") |> 
+  mutate(
+    sigma2 = sigma^2,
+    varcomp = factor(varcomp, c("s_r", "s_L"), 
+                     c("repeatability", "inter-laboratory"))
+  ) |> 
+  ggplot(aes(m_hat, sigma2, fill = varcomp)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = sprintf("%.0f%%", 100 * sigma2 / s_R^2)), 
+                position = position_stack(.5), size = 3) +
+  labs(fill = "variance component", y = "reproducibility variance",
+       x = "level")
+```
+
+The different types of relationships described in the ISO reference are fitted on the precision estimates.
+
+$$
+\begin{aligned}
+(\text{0})\ s &= A \quad \text{(constant)} \\
+(\text{I})\ s &= bm \\
+(\text{II})\ s &= a + bm \\
+(\text{III})\ s^2 &= a_v^2 + (b_vm)^2 \\
+(\text{IV})\ s &= Cm^d \\
+\end{aligned}
+$$
+
+```{r}
 # reproducibility
 fit0 <- with(precision_tbl, fit_precision_relationship(m_hat, s_R, rel = "0"))
 fit1 <- with(precision_tbl, fit_precision_relationship(m_hat, s_R, rel = "I"))
@@ -105,3 +142,4 @@ ggplot(precision_tbl, aes(m_hat, s_r)) +
   geom_line(aes(y = fit4$fitted, color = fit4$rel)) +
   labs(title = "Repeatability", color = "Type of relationship (ISO)")
 ```
+
