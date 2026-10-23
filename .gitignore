@@ -4,3 +4,4 @@
 .Ruserdata
 inst/doc
 **/.quarto/
+R/sysdata.rda
