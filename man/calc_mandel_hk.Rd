@@ -4,7 +4,7 @@
 \alias{calc_mandel_hk}
 \title{calc_mandel_hk}
 \usage{
-calc_mandel_hk(cell_stats)
+calc_mandel_hk(cell_stats, alpha = 0.05)
 }
 \arguments{
 \item{cell_stats}{outcome of function `calc_cell_stats`}
