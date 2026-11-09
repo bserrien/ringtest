@@ -19,6 +19,9 @@ URL: https://github.com/bserrien/ringtest
 BugReports: https://github.com/bserrien/ringtest/issues
 VignetteBuilder: 
     quarto
+Imports:
+  ggplot2,
+  ggpubr
 Suggests: 
     knitr,
     quarto,
