@@ -4,6 +4,7 @@ export(calc_cell_stats)
 export(calc_mandel_hk)
 export(calc_variances)
 export(cochran_critical_value)
+export(fit_precision_gls)
 export(fit_precision_relationship)
 export(grubbs_critical_value_double)
 export(grubbs_critical_value_single)
@@ -17,4 +18,8 @@ export(test_grubbs_single)
 export(test_outliers)
 import(ggplot2)
 importFrom(ggpubr,ggarrange)
-importFrom(nlme,lme)
+importFrom(nlme,
+  gls,
+  lme,
+  varPower
+)
