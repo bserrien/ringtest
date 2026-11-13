@@ -5,7 +5,7 @@
 #'
 #' @param cell_data A data.frame containing the raw individual observation test results for a single level, with columns 'lab' and 'value'.
 #'
-#' @importFrom nlme lme
+#' @importFrom nlme lme VarCorr fixef
 #'
 #' @return A data.frame containing p, m_hat, s_r, s_L, and s_R.
 #'
@@ -16,7 +16,7 @@ calc_variances_reml <- function(cell_data) {
   p      <- length(unique(df_raw$lab))
 
   # fit random intercept model y ~ 1 + (1 | lab) via REML
-  fit <- lme(
+  fit <- nlme::lme(
     fixed  = value ~ 1,
     random = ~ 1 | lab,
     method = "REML",
@@ -24,7 +24,7 @@ calc_variances_reml <- function(cell_data) {
   )
 
   # Extract variance components (s_L and s_r)
-  # VarCorr(fit) returns standard deviations as character matrix
+  # nlme::VarCorr(fit) returns standard deviations as character matrix
   vc      <- nlme::VarCorr(fit)
   s_L_est <- as.numeric(vc["(Intercept)", "StdDev"])
   s_r_est <- as.numeric(vc["Residual", "StdDev"])
