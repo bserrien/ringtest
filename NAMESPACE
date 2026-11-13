@@ -2,7 +2,8 @@
 
 export(calc_cell_stats)
 export(calc_mandel_hk)
-export(calc_variances)
+export(calc_variances_iso)
+export(calc_variances_reml)
 export(cochran_critical_value)
 export(fit_precision_gls)
 export(fit_precision_relationship)
@@ -11,7 +12,7 @@ export(grubbs_critical_value_single)
 export(mandel_h_indicator)
 export(mandel_k_indicator)
 export(plot_mandel_hk)
-export(precision)
+export(ringtest)
 export(test_cochran)
 export(test_grubbs_double)
 export(test_grubbs_single)
@@ -19,6 +20,8 @@ export(test_outliers)
 import(ggplot2)
 importFrom(ggpubr,ggarrange)
 importFrom(nlme,
+  VarCorr,
+  fixef,
   gls,
   lme,
   varPower

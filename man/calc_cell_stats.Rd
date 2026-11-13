@@ -9,6 +9,9 @@ calc_cell_stats(data)
 \arguments{
 \item{data}{A data.frame with columns: `lab`, `level`, `value`}
 }
+\value{
+A data.frame with columns: `lab`, `level`, `n` (number of replicates), `mean`, `sd`
+}
 \description{
 Calculate cell means and within-cell standard deviations
 }
