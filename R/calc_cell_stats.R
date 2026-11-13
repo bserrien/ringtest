@@ -5,6 +5,8 @@
 #'
 #' @param data A data.frame with columns: `lab`, `level`, `value`
 #'
+#' @return A data.frame with columns: `lab`, `level`, `n` (number of replicates), `mean`, `sd`
+#'
 #' @export
 calc_cell_stats <- function(data) {
   labs   <- unique(data$lab)
