@@ -3,6 +3,8 @@
 #' @description
 #' Iterative process to detect and remove outliers as described in the ISO 5725-2 manual.
 #'
+#' @importFrom dplyr anti_join
+#'
 #' @param cell_stats A data.frame containing the cell statistics; outcome of function `calc_cell_stats.`
 #' @param maxiter Maximal number of iterations to perform outlier detection and removal.
 #'
