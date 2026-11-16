@@ -31,7 +31,7 @@ outlier_removal_iso <- function(cell_stats, maxiter = NULL, verbose = TRUE) {
       )
     if (verbose) {
       cat("iteration ", iter, ":\n", sep = "")
-      print(outl_strag_1)
+      print(outl_strag_i)
     }
 
     outl_i <- outl_strag_i |>
