@@ -51,5 +51,9 @@ outlier_removal_iso <- function(cell_stats, maxiter = NULL, verbose = TRUE) {
     }
   }
 
+  if (verbose) {
+    paste0("Outlier detection ended after ", iter, " iterations.")
+  }
+
   return(cell_stats_clean)
 }
