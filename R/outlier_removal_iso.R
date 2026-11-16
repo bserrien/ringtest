@@ -42,6 +42,7 @@ outlier_removal_iso <- function(cell_stats, maxiter = NULL, verbose = TRUE) {
       )
     # stop if no more outliers identified
     if (nrow(outl_i) == 0) {
+      paste0("Outlier detection ended after ", iter, " iterations.")
       break
     } else {
       # remove outliers, retain stragglers
@@ -49,6 +50,10 @@ outlier_removal_iso <- function(cell_stats, maxiter = NULL, verbose = TRUE) {
         cell_stats_clean, outl_i, by = c("lab", "level")
       )
     }
+  }
+
+  if (verbose) {
+    paste0("Outlier detection ended after ", iter, " iterations.")
   }
 
   return(cell_stats_clean)
