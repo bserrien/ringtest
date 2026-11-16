@@ -19,6 +19,7 @@ export(test_grubbs_double)
 export(test_grubbs_single)
 export(test_outliers)
 import(ggplot2)
+importFrom(dplyr,anti_join)
 importFrom(ggpubr,ggarrange)
 importFrom(nlme,
   VarCorr,
