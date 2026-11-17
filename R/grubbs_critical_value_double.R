@@ -14,9 +14,6 @@ grubbs_critical_value_double <- function(p, alpha = 0.05) {
       alpha %in% c(0.002, 0.01, 0.02, 0.05, 0.1, 0.2)
   )
 
-  # Formula (D.3) uses one-tailed alpha; Table 6 uses two-tailed alpha
-  alpha_one_sided <- alpha / 2
-
   # Coefficients table from Table D.1
   coeff_tbl <- data.frame(
     a  = c(0.001, 0.005, 0.010, 0.025, 0.050, 0.100),
