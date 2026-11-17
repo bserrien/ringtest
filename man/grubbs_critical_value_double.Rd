@@ -4,12 +4,12 @@
 \alias{grubbs_critical_value_double}
 \title{grubbs_critical_value_double}
 \usage{
-grubbs_critical_value_double(p, alpha = 0.05)
+grubbs_critical_value_double(p, alpha)
 }
 \arguments{
 \item{p}{number of labs}
 
-\item{alpha}{type I error should be one of 0.001, 0.005, 0.01, 0.025, 0.05 (default), 0.1}
+\item{alpha}{type I error}
 }
 \description{
 Grubbs' Double Outlier Test One-Tailed Critical Value (ISO Formulae D.3-.4)

@@ -11,7 +11,7 @@
 test_grubbs_double <- function(cell_stats_level,
                                alpha_straggler = 0.05,
                                alpha_outlier = 0.01) {
-
+  browser()
   sub   <- cell_stats_level[!is.na(cell_stats_level$mean), ]
   means <- sort(sub$mean, decreasing = FALSE) # sort means in ascending order
   p     <- length(means) # number of labs
