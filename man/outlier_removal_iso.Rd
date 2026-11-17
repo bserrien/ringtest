@@ -4,12 +4,24 @@
 \alias{outlier_removal_iso}
 \title{outlier_removal_iso}
 \usage{
-outlier_removal_iso(cell_stats, maxiter = NULL, verbose = TRUE)
+outlier_removal_iso(
+  cell_stats,
+  maxiter = NULL,
+  verbose = TRUE,
+  alpha_straggler = 0.05,
+  alpha_outlier = 0.01
+)
 }
 \arguments{
 \item{cell_stats}{A data.frame containing the cell statistics; outcome of function `calc_cell_stats.`}
 
 \item{maxiter}{Maximal number of iterations to perform outlier detection and removal.}
+
+\item{verbose}{Default TRUE prints information of each iteration to the console.}
+
+\item{alpha_straggler}{Type I error rate for identification of stragglers (defaul 0.05).}
+
+\item{alpha_outlier}{Type I error rate for identification of outliers (default 0.01).}
 }
 \value{
 A data.frame containing the cell statistics of labs and levels after outlier removal. Intermediate steps are printed to the console when `verbose` = TRUE (default).
